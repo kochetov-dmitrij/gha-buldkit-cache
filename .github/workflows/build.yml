@@ -88,28 +88,13 @@ jobs:
         with:
           context: .
           push: false
-          tags: "${{ env.DOCKER_REPO }}/wunder_ruby_front_app:staging_${{ github.sha }}"
+          tags: "${{ env.DOCKER_REPO }}/kek:staging_${{ github.sha }}"
 
 
 
 #          cache-from: type=local,src=/tmp/.buildx-cache/wunder_ruby_front_app
 #          cache-to: type=local,dest=/tmp/.buildx-cache-new/wunder_ruby_front_app,mode=max
 
-
-
-
-#      - name: Build and push app (production)
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          build-args: |
-#            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-#            RAILS_ENV=production
-#          push: true
-#          tags: "${{ env.DOCKER_REPO }}/wunder_ruby_front_app:production_${{ github.sha }}"
-#          cache-from: type=local,src=/tmp/.buildx-cache-new/wunder_ruby_front_app
-#      - name: Setup upterm session
-#        uses: lhotari/action-upterm@v1
 
 
       - name: Setup upterm session

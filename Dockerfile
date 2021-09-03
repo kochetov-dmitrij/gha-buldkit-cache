@@ -1,4 +1,3 @@
 FROM nginx
 
-#RUN --mount=type=bind,target=/test_cache_folder_1/ echo `date` >> /test_cache_folder_1/test_cache.txt
-RUN --mount=type=bind,source=example,target=/data cp /data/* /root/
+RUN --mount=type=bind,source=ex,target=/mount_bind cp /mount_bind/* /root/ && echo 456 >> /root/file.txt

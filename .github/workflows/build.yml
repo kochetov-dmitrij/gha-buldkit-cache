@@ -30,82 +30,37 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-15-${{ github.sha }}
+          key: ${{ runner.os }}-16-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-15-
+            ${{ runner.os }}-16-
 
-#      - name: cp docker volumes
-#        run: |
-#          if [ -f "/tmp/.buildx-cache/cache.tar.gz" ]; then
-#            sudo rm -rf /var/lib/docker
-#            sudo tar -xzf /tmp/.buildx-cache/cache.tar.gz -C /
-#            echo "extracted"
-#          fi
-#          sudo ls -lah /var/lib/docker/volumes
-#          sudo find /var/lib/docker/volumes -name test_cache.txt | while read line ; do
-#            echo === $line ===
-#            sudo cat $line
-#          done
+      - name: cp docker volumes
+        run: |
+          if [ -f "/tmp/.cache/deps.tar.gz" ]; then
+            sudo tar -xzf /tmp/.cache/deps.tar.gz
+            echo "extracted"
+          else
+            mkdir -p ex
+            echo new > ex/file.txt
+          fi
 
 #      - name: Setup upterm session
 #        uses: lhotari/action-upterm@v1
-      - run: mkdir -p path/to/artifact
 
-      - run: echo hello > path/to/artifact/world.txt
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: path/to/artifact/world.txt
-
-#      - name: cp docker volumes
-#        run: |
-#          if [ -f "/tmp/.buildx-cache/cache.tar.gz" ]; then
-#
-#            sudo tar -xzf /tmp/.buildx-cache/cache.tar.gz -C /
-#            echo "extracted"
-#          fi
-#          sudo ls -lah /var/lib/docker/volumes
-#          sudo find /var/lib/docker/volumes -name test_cache.txt | while read line ; do
-#            echo === $line ===
-#            sudo cat $line
-#          done
-
-#            sudo rm -rf /var/lib/docker/volumes
-#            sudo rm -rf /var/lib/docker/buildkit
-
-#          mkdir -p  /tmp/.buildx-cache/
-#          echo `date +%s` >> /tmp/.buildx-cache/test_cache.txt
-#          sudo cp /tmp/.buildx-cache/test_cache.txt /var/lib/docker/test_cache.txt
-#          sudo cp /var/lib/docker/test_cache.txt /tmp/.buildx-cache/test_cache.txt
-#      - name: Build and push news-parser
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: services/news-parser
-#          push: true
-#          tags: "${{ env.DOCKER_REPO }}/news_parser:${{ github.sha }}"
-#          cache-from: type=local,src=/tmp/.buildx-cache/news-parser
-#          cache-to: type=local,dest=/tmp/.buildx-cache-new/news-parser,mode=max
-
-
-
-      - name: Build and push app (staging)
+      - name: Build and push app
         uses: docker/build-push-action@v2
         with:
           context: .
           push: false
-          tags: "${{ env.DOCKER_REPO }}/kek:staging_${{ github.sha }}"
-
-
-
-#          cache-from: type=local,src=/tmp/.buildx-cache/wunder_ruby_front_app
-#          cache-to: type=local,dest=/tmp/.buildx-cache-new/wunder_ruby_front_app,mode=max
-
-
+          tags: "${{ env.DOCKER_REPO }}/kek:123"
 
       - name: Setup upterm session
         timeout-minutes: 30
         uses: lhotari/action-upterm@v1
+
+#id=$(docker create test_cache:latest)
+#docker cp $id:path - > dep_cache.tar
+#docker rm -v $id
 
 
 #      - name: cp docker volumes

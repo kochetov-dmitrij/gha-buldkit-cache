@@ -29,10 +29,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-16-${{ github.sha }}
+          path: /tmp/.cache
+          key: ${{ runner.os }}-17-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-16-
+            ${{ runner.os }}-17-
 
       - name: cp docker volumes
         run: |
@@ -52,15 +52,25 @@ jobs:
         with:
           context: .
           push: false
+          load: true
           tags: "${{ env.DOCKER_REPO }}/kek:123"
 
-      - name: Setup upterm session
-        timeout-minutes: 30
-        uses: lhotari/action-upterm@v1
+#      - name: Setup upterm session
+#        timeout-minutes: 30
+#        uses: lhotari/action-upterm@v1
 
-#id=$(docker create test_cache:latest)
-#docker cp $id:path - > dep_cache.tar
-#docker rm -v $id
+      - name: cp docker volumes
+        run: |
+          id=$(docker create ${{ env.DOCKER_REPO }}/kek:123)
+          rm -rf ex/*
+          docker cp $id:/root/file.txt ex/file.txt
+          docker rm -v $id
+          tar -czf /tmp/.cache/deps.tar.gz ex
+
+
+
+
+
 
 
 #      - name: cp docker volumes

@@ -40,7 +40,7 @@ jobs:
             sudo tar -xzf /tmp/.cache/deps.tar.gz
             echo "extracted"
           else
-            mkdir -p ex
+            mkdir -p ex/ /tmp/.cache/
             echo new > ex/file.txt
           fi
 

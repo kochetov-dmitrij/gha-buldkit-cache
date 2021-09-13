@@ -22,8 +22,8 @@ jobs:
           install: true
       - name: Prepare Environment Variables
         run: |
-          echo "BUILDX_BUILDER=${{ steps.docker-builder.outputs.name }}" >> $GITHUB_ENV
-          echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.docker-builder.outputs.name }}0" >> $GITHUB_ENV
+          echo "BUILDX_BUILDER=${{ steps.buildx.outputs.name }}" >> $GITHUB_ENV
+          echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
 
       - name: Build and push app
         uses: docker/build-push-action@v2

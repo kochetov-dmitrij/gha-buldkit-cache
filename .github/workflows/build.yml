@@ -59,7 +59,7 @@ jobs:
           context: .
           push: true
           load: false
-          tags: "${{ env.DOCKER_REPO }}/kek:${GITHUB_REF##*/}"
+          tags: "${{ env.DOCKER_REPO }}/kek:${{GITHUB_REF##*/}}"
 
 #      - name: Setup upterm session
 #        timeout-minutes: 30

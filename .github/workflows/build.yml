@@ -19,7 +19,6 @@ jobs:
       - run: echo ${GITHUB_REF##*/}
       - env:
           NAME1: ${GITHUB_REF##*/}
-          NAME2: `echo ${GITHUB_REF##*/}`
         run: echo ${GITHUB_REF##*/}
       - name: Set up Docker Buildx
         id: buildx

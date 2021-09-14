@@ -22,7 +22,7 @@ jobs:
           install: true
       - name: Cache Buildx
         uses: actions/cache@v2
-        id: buildx-cache
+        id: buildx_cache
         with:
           path: /tmp/buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -41,7 +41,7 @@ jobs:
       - name: Restore buildx cache
 #        if: steps.buildx-cache.outputs.cache-hit == 'true'
         run: |
-          echo ${{ steps.buildx-cache.outputs.cache-hit }}
+          echo ${{ steps.buildx_cache.outputs.cache-hit }}
           docker buildx stop --builder "${BUILDX_BUILDER}"
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
             -v /tmp/buildx-cache:/backup \

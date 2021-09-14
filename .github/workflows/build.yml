@@ -77,5 +77,6 @@ jobs:
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
             -v /tmp/.cache:/tmp/.cache \
             alpine:3.10 /bin/sh -c "cd / && tar czf /tmp/.cache/buildkit.tar.gz /var/lib/buildkit"
+
 #      - name: Image digest
 #        run: echo ${{ steps.docker_build.outputs.digest }}

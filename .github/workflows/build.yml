@@ -34,7 +34,7 @@ jobs:
           registry: ${{ env.GH_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ github.token }}
-      - name: Prepare Environment Variables
+      - name: Prepare Buildx envs
         run: |
           echo "BUILDX_BUILDER=${{ steps.buildx.outputs.name }}" >> $GITHUB_ENV
           echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
@@ -56,6 +56,7 @@ jobs:
           tags: "${{ env.DOCKER_REPO }}/kek:${{ github.sha }}"
 #          cache-from: type=registry,ref=${{ env.DOCKER_REPO }}/wunder_ruby_front_app_cache:${{ env.GITHUB_REF_SLUG_URL }}
 #          cache-to: type=registry,ref=${{ env.DOCKER_REPO }}/wunder_ruby_front_app_cache:${{ env.GITHUB_REF_SLUG_URL }},mode=max
+
 
 #      - name: Setup upterm session
 #        timeout-minutes: 30

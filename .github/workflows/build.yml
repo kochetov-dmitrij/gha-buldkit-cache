@@ -41,7 +41,7 @@ jobs:
       - name: Restore buildx cache
 #        if: steps.buildx-cache.outputs.cache-hit == 'true'
         run: |
-          echo ${{ steps.buildxcache.outputs.cache-hit }}
+          echo ${{ steps.buildxcache.outputs }}
           docker buildx stop --builder "${BUILDX_BUILDER}"
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
             -v /tmp/buildx-cache:/backup \

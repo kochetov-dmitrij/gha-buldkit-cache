@@ -25,9 +25,9 @@ jobs:
         id: buildx-cache
         with:
           path: /tmp/.cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-
       - name: Login to GitHub docker package repo
         uses: docker/login-action@v1
         with:
@@ -44,7 +44,7 @@ jobs:
             docker buildx stop --builder "${BUILDX_BUILDER}"
             docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
               -v /tmp/.cache:/backup \
-              alpine:3.10 /bin/sh -c "cd / && tar xf /backup/backup.tar.gz"
+              alpine:3.10 cp -r /backup/buildkit /backup/
             docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap
             docker buildx --builder "${BUILDX_BUILDER}" du --verbose
           fi
@@ -75,6 +75,7 @@ jobs:
           echo "Backup buildx cache"
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
             -v /tmp/.cache:/backup \
-            alpine:3.10 /bin/sh -c "cd / && tar cf /backup/backup.tar.gz /var/lib/buildkit"
+            alpine:3.10 cp -r /var/lib/buildkit /backup/
+#            alpine:3.10 /bin/sh -c "cd / && tar cf /backup/backup.tar.gz /var/lib/buildkit"
 #      - name: Image digest
 #        run: echo ${{ steps.docker_build.outputs.digest }}

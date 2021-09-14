@@ -40,20 +40,19 @@ jobs:
           echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
       - name: Restore buildx cache
         run: |
-          ls -lah /tmp/
-          docker buildx stop --builder "${BUILDX_BUILDER}"
-          docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
-            -v /tmp/.cache:/backup \
-            alpine:3.10 /bin/sh -c "cd / && tar xf /backup/backup.tar.gz"
-          docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap
-          docker buildx --builder "${BUILDX_BUILDER}" du --verbose
-
+          if [ ! -d "/tmp/.cache" ]; then
+            docker buildx stop --builder "${BUILDX_BUILDER}"
+            docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
+              -v /tmp/.cache:/backup \
+              alpine:3.10 /bin/sh -c "cd / && tar xf /backup/backup.tar.gz"
+            docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap
+            docker buildx --builder "${BUILDX_BUILDER}" du --verbose
+          fi
       - name: Build and push app
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          load: false
           tags: "${{ env.DOCKER_REPO }}/kek:${{ github.sha }}"
 #          cache-from: type=registry,ref=${{ env.DOCKER_REPO }}/wunder_ruby_front_app_cache:${{ env.GITHUB_REF_SLUG_URL }}
 #          cache-to: type=registry,ref=${{ env.DOCKER_REPO }}/wunder_ruby_front_app_cache:${{ env.GITHUB_REF_SLUG_URL }},mode=max

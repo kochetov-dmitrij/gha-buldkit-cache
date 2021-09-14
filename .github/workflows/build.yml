@@ -25,9 +25,9 @@ jobs:
         id: buildx-cache
         with:
           path: /tmp/.cache
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ runner.os }}-1-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ runner.os }}-1-
       - name: Login to GitHub docker package repo
         uses: docker/login-action@v1
         with:

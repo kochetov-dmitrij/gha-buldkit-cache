@@ -22,9 +22,9 @@ jobs:
           install: true
       - name: Cache Buildx
         uses: actions/cache@v2
-        id: buildxcache
+        id: buildx-cache
         with:
-          path: /tmp/buildx-cache
+          path: /tmp/.cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
@@ -39,12 +39,11 @@ jobs:
           echo "BUILDX_BUILDER=${{ steps.buildx.outputs.name }}" >> $GITHUB_ENV
           echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
       - name: Restore buildx cache
-#        if: steps.buildx-cache.outputs.cache-hit == 'true'
         run: |
-          echo ${{ steps.buildxcache.outputs }}
+          ls -lah /tmp/
           docker buildx stop --builder "${BUILDX_BUILDER}"
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
-            -v /tmp/buildx-cache:/backup \
+            -v /tmp/.cache:/backup \
             alpine:3.10 /bin/sh -c "cd / && tar xf /backup/backup.tar.gz"
           docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap
           docker buildx --builder "${BUILDX_BUILDER}" du --verbose
@@ -76,7 +75,7 @@ jobs:
           docker buildx --builder "${BUILDX_BUILDER}" du --verbose
           echo "Backup buildx cache"
           docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
-            -v /tmp/buildx-cache:/backup \
+            -v /tmp/.cache:/backup \
             alpine:3.10 /bin/sh -c "cd / && tar cf /backup/backup.tar.gz /var/lib/buildkit"
 #      - name: Image digest
 #        run: echo ${{ steps.docker_build.outputs.digest }}

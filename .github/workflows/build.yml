@@ -25,9 +25,9 @@ jobs:
         id: buildx-cache
         with:
           path: /tmp/.cache
-          key: ${{ runner.os }}-1-${{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-1-
+            ${{ runner.os }}-
       - name: Login to GitHub docker package repo
         uses: docker/login-action@v1
         with:
@@ -40,7 +40,7 @@ jobs:
           echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
       - name: Restore buildx cache
         run: |
-          if [ -d "/tmp/.cache" ]; then
+          if [ -d "/tmp/.cache/buildkit" ]; then
             docker buildx stop --builder "${BUILDX_BUILDER}"
             docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
               -v /tmp/.cache:/backup \

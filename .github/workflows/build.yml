@@ -40,7 +40,7 @@ jobs:
           echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.buildx.outputs.name }}0" >> $GITHUB_ENV
       - name: Restore buildx cache
         run: |
-          if [ ! -d "/tmp/.cache" ]; then
+          if [ -d "/tmp/.cache" ]; then
             docker buildx stop --builder "${BUILDX_BUILDER}"
             docker run --rm --volumes-from "${BUILDX_BUILDER_CONTAINER}" \
               -v /tmp/.cache:/backup \
